@@ -1,5 +1,6 @@
 var totalOrders = 0;
 var totalSpent = 0;
+var totalShippingSpent = 0;
 var pulling = true;
 var offset = 0;
 
@@ -14,6 +15,8 @@ function getStatistics() {
 			orders.forEach(order => {
 				let tpa = order["paid_amount"] / 100000;
 				totalSpent += tpa;
+				let tpsa = order["shipping_fee"] / 100000;
+				totalShippingSpent += tpsa;
 			});
 			offset += 10;
 			console.log('Đã lấy được: ' + totalOrders + ' đơn hàng');
@@ -24,6 +27,7 @@ function getStatistics() {
 			else {
 				console.log("%cTổng đơn hàng đã giao: "+"%c"+moneyFormat(totalOrders), "font-size: 30px;","font-size: 30px; color:red");
 				console.log("%cTổng chi tiêu: "+"%c"+moneyFormat(totalSpent)+"đ", "font-size: 30px;","font-size: 30px; color:red");
+				console.log("%cTổng tiền ship: "+"%c"+moneyFormat(totalShippingSpent)+"đ", "font-size: 30px;","font-size: 30px; color:red");
 			}
 		}
 	};
