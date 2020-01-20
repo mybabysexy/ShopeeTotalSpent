@@ -9,13 +9,12 @@ function getStatistics() {
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			orders = JSON.parse(this.responseText)['data'];
-			totalOrders += orders.length;
 			pulling = orders.length >= 10;
+			orders = orders.filter(order => order['status'] == 'hoan_thanh');
+			totalOrders += orders.length;
 			orders.forEach(order => {
-				if(order['status'] == 'hoan_thanh') {
-					let tpa = order["grand_total"];
-					totalSpent += tpa;
-				}				
+				let tpa = order["grand_total"];
+				totalSpent += tpa;		
 			});
 			page += 1;
 			console.log('Đã lấy được: ' + totalOrders + ' đơn hàng');
