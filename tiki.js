@@ -12,8 +12,10 @@ function getStatistics() {
 			totalOrders += orders.length;
 			pulling = orders.length >= 10;
 			orders.forEach(order => {
-				let tpa = order["grand_total"];
-				totalSpent += tpa;
+				if(order['status'] == 'hoan_thanh') {
+					let tpa = order["grand_total"];
+					totalSpent += tpa;
+				}				
 			});
 			page += 1;
 			console.log('Đã lấy được: ' + totalOrders + ' đơn hàng');
