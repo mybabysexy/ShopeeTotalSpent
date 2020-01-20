@@ -1,6 +1,7 @@
 var totalOrders = 0;
 var totalSpent = 0;
 var pulling = true;
+var page = 1;
 
 function getStatistics() {
 	var orders = [];
@@ -8,16 +9,25 @@ function getStatistics() {
 	xhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			orders = JSON.parse(this.responseText)['data'];
-			totalOrders = orders.length;
+			totalOrders += orders.length;
+			pulling = orders.length >= 10;
 			orders.forEach(order => {
 				let tpa = order["grand_total"];
 				totalSpent += tpa;
 			});
-			console.log("%cTổng đơn hàng đã giao: "+"%c"+moneyFormat(totalOrders), "font-size: 30px;","font-size: 30px; color:red");
-			console.log("%cTổng chi tiêu: "+"%c"+moneyFormat(totalSpent)+"đ", "font-size: 30px;","font-size: 30px; color:red");
+			page += 1;
+			console.log('Đã lấy được: ' + totalOrders + ' đơn hàng');
+			if(pulling) {
+				console.log('Đang kéo thêm...');
+				getStatistics();
+			}
+			else {
+				console.log("%cTổng đơn hàng đã giao: "+"%c"+moneyFormat(totalOrders), "font-size: 30px;","font-size: 30px; color:red");
+				console.log("%cTổng chi tiêu: "+"%c"+moneyFormat(totalSpent)+"đ", "font-size: 30px;","font-size: 30px; color:red");
+			}
 		}
 	};
-	xhttp.open("GET", "https://tiki.vn/api/v2/me/orders", true);
+	xhttp.open("GET", "https://tiki.vn/api/v2/me/orders?page=" + page + "&limit=10", true);
 	xhttp.send();
 }
 
